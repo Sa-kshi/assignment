@@ -1,58 +1,59 @@
 import style from "./App.module.css";
-//import './key';
-import Axios from 'axios';
-import { useState } from 'react';
-import NewsTile from './NewsTile';
+import Axios from "axios";
+import { useState } from "react";
+import NewsTile from "./NewsTile";
 import FilterForm from "./filter";
 
+
 function Searchform() {
-    const [query, setquery] = useState("");
-    const [news, setnews] = useState([]);
-   // const [cat,setcat] = useState("sports");
 
-    var url = `https://newsapi.org/v2/everything?q=${query}&apiKey=6a1d4f2afd3b4379bd04f56e72a8bb6d`;
+//(step 2)
 
-    async function getNews() {
-        var result = await Axios.get(url);
-        setnews(result.data.articles);
-        console.log(result.data);
-    }
+    //to store query paramter 
+  const [query, setquery] = useState("");
 
-    const onSubmit =(e)=>{
-        e.preventDefault();
-        getNews();
-    };
+//   to store the list of record recieved
+  const [news, setnews] = useState([]); 
 
-    return (
-        <> 
-            <form className = {style["app_form"]} onSubmit={onSubmit}>
-            <input type = "text"
-            className ={style["app_input"]}
-            placeholder = "Enter search phrase"
-            value = { query }
-            onChange = {(e) => setquery(e.target.value) }/>
-            <input type="submit" className ={style["app_submit"]} value="Search"/>
-            {/* <select className={style["app_select"]}>
-                <option onClick={() => setcat("technology")}>Technology</option>
-                <option onClick={() => setcat("business")}>Business</option>
-                <option onClick={() => setcat("entertainment")}>Entertainment</option>
-                <option onClick={() => setcat("general")}>General</option>
-                <option onClick={() => setcat("health")}>Health</option>
-                <option onClick={() => setcat("science")}>Scinece</option>
-                <option onClick={() => setcat("sports")}>Sports</option>
-            </select> */}
-            <FilterForm />
-            </form>   
+  var url = `https://newsapi.org/v2/everything?q=${query}&apiKey=${process.env.REACT_APP_API_KEY}`;
 
-        <div>
-            {news.map(newsone =>{
-            // return <p>{newsone["title"]}</p>
-            return <NewsTile news={newsone} />
-            })}
-        </div>
+  //fuction called to get the records
+  async function getNews() {
+    var result = await Axios.get(url);
+    setnews(result.data.articles);
+    console.log(result.data);
+  }
 
-        </>
-    );
+  //on the click of search button 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    getNews();
+  };
+
+  return (
+    <>
+      <form className={style["app_form"]} onSubmit={onSubmit}>
+        <input
+          type="text"
+          className={style["app_input"]}
+          placeholder="Enter search phrase"
+          value={query}
+          onChange={(e) => setquery(e.target.value)}
+        />
+        <input type="submit" className={style["app_submit"]} value="Search" />
+
+        {/* to filer out by catogries  */}
+        <FilterForm />
+      </form>
+
+      {/*Returning the records component*/}
+      <div>
+        {news.map((newsone) => {
+          return <NewsTile news={newsone} />;
+        })}
+      </div>
+    </>
+  );
 }
 
 export default Searchform;
