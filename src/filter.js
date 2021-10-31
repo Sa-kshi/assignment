@@ -1,21 +1,24 @@
 import style from "./App.module.css";
 import Axios from "axios";
-import { useState } from "react";
-import NewsTile from "./NewsTile";
+import { useContext }from "react";
+
+import {NewsContext} from "./App";
 
 function FilterForm() {
+    //maintinig global state 
+  let {news,setnews} = useContext(NewsContext) ; 
   //(step 3)
-  //to store the reocrd of slecetd option
-  const [news, setnews] = useState([]);
 
   //function called each time the filter option selected
   async function getNews(cat) {
+    //clearState()
     var result = await Axios.get(
       `https://newsapi.org/v2/top-headlines?category=${cat}&apiKey=${process.env.REACT_APP_API_KEY}`
     );
     setnews(result.data.articles);
     console.log(result.data);
   }
+
 
   return (
     <>
@@ -35,12 +38,6 @@ function FilterForm() {
         <option value="business">Business</option>
       </select>
 
-      {/*Returning the records component*/}
-      <div>
-        {news.map((newsone) => {
-          return <NewsTile news={newsone} />;
-        })}
-      </div>
     </>
   );
 }

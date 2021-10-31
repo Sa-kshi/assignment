@@ -1,8 +1,10 @@
 import style from "./App.module.css";
 import Searchform from "./searchform";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , createContext } from "react";
 import Axios from "axios";
-import NewsTile from "./NewsTile";
+import NewsPage from './NewsPage';
+
+export const NewsContext = createContext();//to maintain same context througout pages 
 
 function App() {
     //   to store the list of record recieved
@@ -28,15 +30,13 @@ function App() {
     <>
       <h1> News! </h1>
         {/* search bar */}
-      <Searchform />
+  
+     <NewsContext.Provider value={{ news,setnews}}>
+       <Searchform />
 
+      <NewsPage/>
+     </NewsContext.Provider>
 
-     {/*Returning the records component*/}
-      <section>
-        {news.map((newsone) => {
-          return <NewsTile news={newsone} />;
-        })}
-      </section>
     </>
   );
 }

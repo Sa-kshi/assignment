@@ -1,19 +1,17 @@
 import style from "./App.module.css";
 import Axios from "axios";
-import { useState } from "react";
-import NewsTile from "./NewsTile";
+import { useState ,useContext} from "react";
 import FilterForm from "./filter";
-
+import {NewsContext} from "./App";
 
 function Searchform() {
+  //mainting global state 
+  let {news,setnews} = useContext(NewsContext) ; 
 
 //(step 2)
 
     //to store query paramter 
   const [query, setquery] = useState("");
-
-//   to store the list of record recieved
-  const [news, setnews] = useState([]); 
 
   var url = `https://newsapi.org/v2/everything?q=${query}&apiKey=${process.env.REACT_APP_API_KEY}`;
 
@@ -46,12 +44,6 @@ function Searchform() {
         <FilterForm />
       </form>
 
-      {/*Returning the records component*/}
-      <div>
-        {news.map((newsone) => {
-          return <NewsTile news={newsone} />;
-        })}
-      </div>
     </>
   );
 }
